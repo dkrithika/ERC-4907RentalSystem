@@ -63,7 +63,7 @@ A decentralized NFT rental application built with Solidity, Foundry, and a minim
 
 ```bash
 git clone https://github.com/dkrithika/ERC-4907RentalSystem
-cd <your-project-folder>
+cd GamingRentals
 forge install
 forge build
 ```
@@ -116,15 +116,19 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 
 ## Frontend
 
-Describe what the frontend can do:
+🔌 MetaMask wallet connection
 
-- Connect wallet
-- Set contract address
-- Approve token spending
-- List NFT
-- Rent NFT
-- End rental
-- Read listing data
+📝 List NFTs with price and collateral
+
+✅ Approve USDC spending
+
+🔑 Rent NFTs (pay ETH, deposit USDC)
+
+⏱️ End rentals after expiry
+
+🗑️ Delist NFTs
+
+📊 Real-time transaction status
 
 
 ## Example Demo
@@ -136,7 +140,6 @@ You can add:
 - A short demo GIF
 - Sample transaction hashes
 
-Visuals and examples are often recommended because they make the README easier to understand quickly.[3][2]
 
 ## Security Considerations
 
@@ -145,8 +148,26 @@ Visuals and examples are often recommended because they make the README easier t
 - Approval checks before transfer
 - Rental status checks before delisting
 - Input validation for token IDs, price, or collateral
-- This isnt supportive of cross-chain interaction,only sepolia
+- SafeERC20 for token transfers
+- Custom errors for gas efficiency
+- Access control (only owner can list/delist)
+- Rental period enforcement (cannot end early)
+- 94%+ test coverage
+- This isnt supportive of cross-chain interaction,only sepolia.
 
+## 🏆 Achievements
+
+- ERC-4907 compliant
+- 24 unit & integration tests
+- 94% branch coverage
+- Deployed to Sepolia testnet
+- Verified on Etherscan
+
+
+## Live Demo on Etherscan
+```link
+https://sepolia.etherscan.io/address/0x135ee939aF16Ce33036A965f7Ea65954A75801fb
+```
 ## Future Improvements
 
 - Improve frontend UX
@@ -164,7 +185,7 @@ MIT License
 Add your details:
 
 - Name: Krithika Damshala
-- GitHub: <your-link>
+- GitHub: https://github.com/dkrithika
 
 ***
 
