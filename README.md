@@ -1,4 +1,4 @@
-# ERC4907 Rental System
+# ERC4907 NFTRental System
 
 A decentralized NFT rental application built with Solidity, Foundry, and a minimal ethers.js frontend. The project uses ERC-4907-style user assignments and an escrow-based rental flow that lets owners list NFTs, renters lock collateral, and temporary usage rights be assigned on-chain.
 ## Features
