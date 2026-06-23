@@ -62,7 +62,7 @@ A decentralized NFT rental application built with Solidity, Foundry, and a minim
 
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/dkrithika/ERC-4907RentalSystem
 cd <your-project-folder>
 forge install
 forge build
