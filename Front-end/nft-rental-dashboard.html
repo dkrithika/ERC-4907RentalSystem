@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NFT Rental Dashboard</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <style>
+    /* Art direction: NFT rental dapp → calm, technical, wallet-first tool
+       Palette: neutral with teal accent for trustworthy on-chain actions
+       Typography: Satoshi body + geometric SVG mark for product feel
+       Density: balanced, compact web app */
+    :root, [data-theme="light"] {
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+      --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+      --space-12: 3rem; --space-16: 4rem;
+      --color-bg: #f7f6f2;
+      --color-surface: #f9f8f5;
+      --color-surface-2: #fbfbf9;
+      --color-surface-offset: #f3f0ec;
+      --color-surface-dynamic: #e6e4df;
+      --color-border: #d4d1ca;
+      --color-divider: #dcd9d5;
+      --color-text: #28251d;
+      --color-text-muted: #66645f;
+      --color-text-faint: #97958e;
+      --color-text-inverse: #f9f8f4;
+      --color-primary: #01696f;
+      --color-primary-hover: #0c4e54;
+      --color-primary-highlight: #d9e7e5;
+      --color-error: #a12c7b;
+      --color-success: #437a22;
+      --radius-sm: 0.375rem; --radius-md: 0.5rem; --radius-lg: 0.75rem; --radius-xl: 1rem; --radius-full: 9999px;
+      --shadow-sm: 0 1px 2px oklch(0.2 0.01 80 / 0.06);
+      --shadow-md: 0 4px 12px oklch(0.2 0.01 80 / 0.08);
+      --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --font-body: 'Satoshi', Inter, sans-serif;
+      --content-wide: 1200px;
+    }
+    [data-theme="dark"] {
+      --color-bg: #171614;
+      --color-surface: #1c1b19;
+      --color-surface-2: #201f1d;
+      --color-surface-offset: #1d1c1a;
+      --color-surface-dynamic: #2d2c2a;
+      --color-border: #393836;
+      --color-divider: #262523;
+      --color-text: #cdccca;
+      --color-text-muted: #a8a7a4;
+      --color-text-faint: #797876;
+      --color-text-inverse: #2b2a28;
+      --color-primary: #4f98a3;
+      --color-primary-hover: #227f8b;
+      --color-primary-highlight: #313b3b;
+      --color-error: #d163a7;
+      --color-success: #6daa45;
+      --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.2);
+      --shadow-md: 0 4px 12px oklch(0 0 0 / 0.3);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; text-size-adjust: none; }
+    body {
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.6;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+    button, input, textarea, select { font: inherit; color: inherit; }
+    button { cursor: pointer; transition: background var(--transition-interactive), color var(--transition-interactive), border-color var(--transition-interactive), transform var(--transition-interactive), box-shadow var(--transition-interactive); }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
+    .app-shell {
+      width: min(100%, var(--content-wide));
+      margin: 0 auto;
+      padding: var(--space-4);
+      display: grid;
+      gap: var(--space-4);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      background: color-mix(in oklab, var(--color-surface) 88%, transparent);
+      border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: var(--space-4);
+      backdrop-filter: blur(18px);
+      z-index: 10;
+    }
+    .brand { display: flex; align-items: center; gap: var(--space-3); }
+    .brand-mark {
+      width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center;
+      background: var(--color-primary-highlight); color: var(--color-primary);
+    }
+    .brand-copy strong { display: block; font-size: var(--text-sm); }
+    .brand-copy span { display: block; font-size: var(--text-xs); color: var(--color-text-muted); }
+    .topbar-actions { display: flex; align-items: center; gap: var(--space-2); }
+    .theme-toggle, .ghost-btn {
+      min-height: 44px; padding: 0 var(--space-4); border-radius: var(--radius-full);
+      border: 1px solid color-mix(in oklab, var(--color-text) 12%, transparent);
+      background: var(--color-surface-2);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: var(--space-4);
+      align-items: stretch;
+    }
+    .hero-card, .status-card, .panel {
+      background: var(--color-surface);
+      border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+    }
+    .hero-card {
+      padding: clamp(var(--space-5), 4vw, var(--space-10));
+      display: grid; gap: var(--space-5);
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-2) var(--space-3); border-radius: var(--radius-full);
+      background: var(--color-primary-highlight); color: var(--color-primary); font-size: var(--text-xs); width: fit-content;
+    }
+    h1 { font-size: var(--text-xl); line-height: 1.05; letter-spacing: -0.03em; }
+    .hero-copy p, .subtext { color: var(--color-text-muted); max-width: 56ch; }
+    .hero-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3);
+    }
+    .mini-stat {
+      padding: var(--space-4); border-radius: var(--radius-lg); background: var(--color-surface-2);
+      border: 1px solid color-mix(in oklab, var(--color-text) 8%, transparent);
+    }
+    .mini-stat span { display: block; color: var(--color-text-muted); font-size: var(--text-xs); margin-bottom: var(--space-2); }
+    .mini-stat strong { font-size: var(--text-lg); font-variant-numeric: tabular-nums lining-nums; }
+    .status-card {
+      padding: var(--space-5); display: grid; gap: var(--space-4); align-content: start;
+      background: linear-gradient(180deg, color-mix(in oklab, var(--color-primary-highlight) 70%, var(--color-surface) 30%), var(--color-surface));
+    }
+    .wallet-pill {
+      display: inline-flex; align-items: center; gap: var(--space-2); width: fit-content;
+      padding: var(--space-2) var(--space-3); border-radius: var(--radius-full);
+      background: color-mix(in oklab, var(--color-primary) 10%, var(--color-surface)); color: var(--color-text);
+      border: 1px solid color-mix(in oklab, var(--color-primary) 18%, transparent);
+      font-size: var(--text-xs);
+    }
+    .wallet-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+    .btn {
+      min-height: 46px; padding: 0 var(--space-4); border-radius: var(--radius-full); border: 1px solid transparent;
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); font-size: var(--text-sm); font-weight: 700;
+    }
+    .btn-primary { background: var(--color-primary); color: var(--color-text-inverse); }
+    .btn-primary:hover { background: var(--color-primary-hover); }
+    .btn-secondary {
+      background: var(--color-surface-2);
+      border-color: color-mix(in oklab, var(--color-text) 12%, transparent);
+    }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+    .panel { padding: var(--space-5); display: grid; gap: var(--space-4); }
+    .panel-head { display: flex; align-items: start; justify-content: space-between; gap: var(--space-3); }
+    .panel-head h2 { font-size: var(--text-lg); }
+    .panel-head p { color: var(--color-text-muted); font-size: var(--text-sm); }
+    .badge {
+      display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full); background: var(--color-surface-offset); color: var(--color-text-muted); font-size: var(--text-xs);
+    }
+    .form-grid { display: grid; gap: var(--space-3); }
+    .field { display: grid; gap: var(--space-2); }
+    .field label { font-size: var(--text-sm); font-weight: 700; }
+    .field small { color: var(--color-text-muted); font-size: var(--text-xs); }
+    .input, .select {
+      min-height: 48px; width: 100%; border-radius: var(--radius-md); border: 1px solid color-mix(in oklab, var(--color-text) 12%, transparent);
+      background: var(--color-surface-2); padding: 0 var(--space-3);
+    }
+    .input::placeholder { color: var(--color-text-faint); }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+    .message {
+      min-height: 76px; padding: var(--space-3); border-radius: var(--radius-lg);
+      background: var(--color-surface-2); border: 1px solid color-mix(in oklab, var(--color-text) 8%, transparent);
+      font-size: var(--text-sm); white-space: pre-wrap; word-break: break-word;
+    }
+    .message.success { border-color: color-mix(in oklab, var(--color-success) 35%, transparent); }
+    .message.error { border-color: color-mix(in oklab, var(--color-error) 35%, transparent); color: var(--color-error); }
+    .info-list { display: grid; gap: var(--space-3); }
+    .info-row {
+      display: flex; justify-content: space-between; gap: var(--space-4); padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--color-divider);
+      font-size: var(--text-sm);
+    }
+    .info-row span:first-child { color: var(--color-text-muted); }
+    .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: var(--text-xs); padding: var(--space-2) var(--space-3); border-radius: var(--radius-md);
+      background: var(--color-surface-offset); overflow-wrap: anywhere;
+    }
+    .footer-note { color: var(--color-text-muted); font-size: var(--text-xs); }
+    .full { grid-column: 1 / -1; }
+    @media (max-width: 960px) {
+      .hero, .layout, .split { grid-template-columns: 1fr; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .topbar-actions, .wallet-actions { width: 100%; }
+      .btn, .theme-toggle, .ghost-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-label="VaultRent logo">
+            <path d="M4 9.5 12 4l8 5.5v8L12 20l-8-2.5v-8Z"></path>
+            <path d="M8.5 11.5h7"></path>
+            <path d="M12 8.5v6"></path>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <strong>VaultRent</strong>
+          <span>ERC-4907 rental control panel</span>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">Theme</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <article class="hero-card">
+        <div class="eyebrow">Single-page rental UI</div>
+        <div class="hero-copy">
+          <h1>List, rent, end, and delist NFTs from one clean dashboard.</h1>
+         
+        </div>
+        <div class="hero-grid">
+          <div class="mini-stat"><span>List function</span><strong>listRental</strong></div>
+          <div class="mini-stat"><span>Rent function</span><strong>rentNft</strong></div>
+          <div class="mini-stat"><span>Exit paths</span><strong>end + delist</strong></div>
+        </div>
+      </article>
+
+      <aside class="status-card">
+        <div>
+          <div class="wallet-pill" id="walletBadge">Wallet not connected</div>
+        </div>
+        <div>
+          <p class="subtext" id="walletStatus">Set your contract addresses below, then connect MetaMask to send transactions with ethers v6.</p>
+        </div>
+        <div class="wallet-actions">
+          <button class="btn btn-primary" id="connectBtn" type="button">Connect MetaMask</button>
+          <button class="btn btn-secondary" id="refreshBtn" type="button">Refresh wallet</button>
+        </div>
+      </aside>
+    </section>
+
+    <main class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Contract setup</h2>
+            <p>Fill these once before any action.</p>
+          </div>
+          <span class="badge">Required</span>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label for="escrowAddress">RentalEscrow address</label>
+            <input class="input" id="escrowAddress" type="text" placeholder="0x..." />
+          </div>
+          <div class="field">
+            <label for="stablecoinAddress">Stablecoin address</label>
+            <input class="input" id="stablecoinAddress" type="text" placeholder="USDC or your stablecoin address" />
+          </div>
+          <div class="field">
+            <label for="chainId">Expected chain id</label>
+            <input class="input" id="chainId" type="text" placeholder="11155111 or 84532" />
+            <small>Optional guard to prevent sending transactions on the wrong network.</small>
+          </div>
+          <div class="field">
+            <label for="stablecoinDecimals">Stablecoin decimals</label>
+            <input class="input" id="stablecoinDecimals" type="number" value="6" min="0" />
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Live session</h2>
+            <p>Wallet, signer, and account context.</p>
+          </div>
+          <span class="badge">Read only</span>
+        </div>
+        <div class="info-list">
+          <div class="info-row"><span>Connected account</span><span class="code" id="accountDisplay">Not connected</span></div>
+          <div class="info-row"><span>Network</span><span id="networkDisplay">Unknown</span></div>
+          <div class="info-row"><span>Escrow ready</span><span id="escrowReady">No</span></div>
+          <div class="info-row"><span>Stablecoin ready</span><span id="tokenReady">No</span></div>
+        </div>
+        <p class="footer-note">This template uses BrowserProvider and account access flow expected by MetaMask and ethers v6.</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>List NFT</h2>
+            <p>Calls listRental(address,uint256,uint256,uint256).</p>
+          </div>
+          <span class="badge">Owner action</span>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label for="listNftAddress">NFT contract</label><input class="input" id="listNftAddress" type="text" placeholder="ERC-4907 / ERC-721 address" /></div>
+          <div class="split">
+            <div class="field"><label for="listTokenId">Token ID</label><input class="input" id="listTokenId" type="number" min="0" placeholder="1" /></div>
+            <div class="field"><label for="listPricePerDay">Price per day in ETH</label><input class="input" id="listPricePerDay" type="text" placeholder="0.01" /></div>
+          </div>
+          <div class="field"><label for="listCollateral">Collateral in stablecoin units</label><input class="input" id="listCollateral" type="text" placeholder="25" /></div>
+          <button class="btn btn-primary" id="listBtn" type="button">List NFT</button>
+          <div class="message" id="listResult">Waiting for input.</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Approve stablecoin</h2>
+            <p>Approve escrow before renting.</p>
+          </div>
+          <span class="badge">Renter action</span>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label for="approveAmount">Approval amount</label><input class="input" id="approveAmount" type="text" placeholder="25" /></div>
+          <button class="btn btn-primary" id="approveBtn" type="button">Approve</button>
+          <div class="message" id="approveResult">Approval state will appear here.</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Rent NFT</h2>
+            <p>Calls rentNft(uint256,address) and sends ETH value.</p>
+          </div>
+          <span class="badge">Renter action</span>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label for="rentNftAddress">NFT contract</label><input class="input" id="rentNftAddress" type="text" placeholder="0x..." /></div>
+          <div class="split">
+            <div class="field"><label for="rentTokenId">Token ID</label><input class="input" id="rentTokenId" type="number" min="0" placeholder="1" /></div>
+            <div class="field"><label for="rentPriceEth">Rent ETH to send</label><input class="input" id="rentPriceEth" type="text" placeholder="Must match listing pricePerDay" /></div>
+          </div>
+          <button class="btn btn-primary" id="rentBtn" type="button">Rent NFT</button>
+          <div class="message" id="rentResult">Rental transaction result will show here.</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>End rental</h2>
+            <p>Calls endRental(uint256,address) after expiry.</p>
+          </div>
+          <span class="badge">Renter action</span>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label for="endNftAddress">NFT contract</label><input class="input" id="endNftAddress" type="text" placeholder="0x..." /></div>
+          <div class="field"><label for="endTokenId">Token ID</label><input class="input" id="endTokenId" type="number" min="0" placeholder="1" /></div>
+          <button class="btn btn-primary" id="endBtn" type="button">End rental</button>
+          <div class="message" id="endResult">End-rental result will show here.</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Delist NFT</h2>
+            <p>Calls delist(address,uint256).</p>
+          </div>
+          <span class="badge">Owner action</span>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label for="delistNftAddress">NFT contract</label><input class="input" id="delistNftAddress" type="text" placeholder="0x..." /></div>
+          <div class="field"><label for="delistTokenId">Token ID</label><input class="input" id="delistTokenId" type="number" min="0" placeholder="1" /></div>
+          <button class="btn btn-primary" id="delistBtn" type="button">Delist</button>
+          <div class="message" id="delistResult">Delist result will show here.</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script type="module">
+    import { ethers } from 'https://cdn.jsdelivr.net/npm/ethers@6.13.1/+esm';
+
+    const escrowAbi = [
+      'function listRental(address nftAddress,uint256 tokenId,uint256 pricePerDay,uint256 collateralAmount) external',
+      'function rentNft(uint256 tokenId,address nftAddress) external payable',
+      'function endRental(uint256 _tokenId,address nftAddress) external',
+      'function delist(address nftAddress,uint256 tokenId) external'
+    ];
+
+    const erc20Abi = [
+      'function approve(address spender,uint256 amount) external returns (bool)'
+    ];
+
+    const state = {
+      provider: null,
+      signer: null,
+      account: null,
+      chainId: null,
+      theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    };
+
+    const el = id => document.getElementById(id);
+    const fields = {
+      escrowAddress: el('escrowAddress'),
+      stablecoinAddress: el('stablecoinAddress'),
+      chainId: el('chainId'),
+      stablecoinDecimals: el('stablecoinDecimals')
+    };
+
+    function shortAddress(value) {
+      if (!value) return 'Not connected';
+      return `${value.slice(0, 6)}...${value.slice(-4)}`;
+    }
+
+    state.theme = 'light';
+    document.documentElement.setAttribute('data-theme', 'light');
+    function setTheme(theme) {
+      state.theme = theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      document.querySelector('[data-theme-toggle]').textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+
+    function setMessage(id, text, kind = '') {
+      const box = el(id);
+      box.textContent = text;
+      box.className = `message${kind ? ` ${kind}` : ''}`;
+    }
+
+    function requireEthereum() {
+      if (!window.ethereum) {
+        throw new Error('MetaMask not found. Install MetaMask in this browser first.');
+      }
+    }
+
+    function requireAddress(value, name) {
+      if (!value) throw new Error(`${name} is required.`);
+      return ethers.getAddress(value.trim());
+    }
+
+    function getEscrowContract() {
+      const address = requireAddress(fields.escrowAddress.value, 'Escrow address');
+      if (!state.signer) throw new Error('Connect wallet first.');
+      return new ethers.Contract(address, escrowAbi, state.signer);
+    }
+
+    function getTokenContract() {
+      const address = requireAddress(fields.stablecoinAddress.value, 'Stablecoin address');
+      if (!state.signer) throw new Error('Connect wallet first.');
+      return new ethers.Contract(address, erc20Abi, state.signer);
+    }
+
+    async function enforceChain() {
+      const expected = fields.chainId.value.trim();
+      if (!expected || !state.provider) return;
+      const network = await state.provider.getNetwork();
+      if (String(network.chainId) !== expected) {
+        throw new Error(`Wrong network. Expected chain id ${expected}, got ${network.chainId}.`);
+      }
+    }
+
+    async function updateSessionUI() {
+      el('accountDisplay').textContent = state.account ? shortAddress(state.account) : 'Not connected';
+      el('walletBadge').textContent = state.account ? `Connected · ${shortAddress(state.account)}` : 'Wallet not connected';
+      el('walletStatus').textContent = state.account ? 'Wallet connected. You can now approve, list, rent, end, or delist.' : 'Set your contract addresses below, then connect MetaMask to send transactions with ethers v6.';
+      el('escrowReady').textContent = fields.escrowAddress.value.trim() ? 'Yes' : 'No';
+      el('tokenReady').textContent = fields.stablecoinAddress.value.trim() ? 'Yes' : 'No';
+      if (state.provider) {
+        const network = await state.provider.getNetwork();
+        state.chainId = Number(network.chainId);
+        el('networkDisplay').textContent = `${network.name} (${network.chainId})`;
+      } else {
+        el('networkDisplay').textContent = 'Unknown';
+      }
+    }
+
+    async function connectWallet() {
+      requireEthereum();
+      el('connectBtn').disabled = true;
+      try {
+        state.provider = new ethers.BrowserProvider(window.ethereum);
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        state.signer = await state.provider.getSigner();
+        state.account = await state.signer.getAddress();
+        await updateSessionUI();
+      } finally {
+        el('connectBtn').disabled = false;
+      }
+    }
+
+    async function runTx(resultId, action) {
+      try {
+        setMessage(resultId, 'Preparing transaction...');
+        await enforceChain();
+        const tx = await action();
+        setMessage(resultId, `Transaction submitted. Hash: ${tx.hash}`);
+        const receipt = await tx.wait();
+        setMessage(resultId, `Confirmed in block ${receipt.blockNumber}. Hash: ${receipt.hash}`, 'success');
+        await updateSessionUI();
+      } catch (error) {
+        const message = error?.shortMessage || error?.reason || error?.message || 'Transaction failed.';
+        setMessage(resultId, message, 'error');
+      }
+    }
+
+    document.querySelector('[data-theme-toggle]').addEventListener('click', () => {
+      setTheme(state.theme === 'dark' ? 'light' : 'dark');
+    });
+
+    el('connectBtn').addEventListener('click', async () => {
+      try {
+        await connectWallet();
+      } catch (error) {
+        el('walletStatus').textContent = error?.message || 'Wallet connection failed.';
+      }
+    });
+
+    el('refreshBtn').addEventListener('click', updateSessionUI);
+
+    el('listBtn').addEventListener('click', () => runTx('listResult', async () => {
+      const contract = getEscrowContract();
+      const nftAddress = requireAddress(el('listNftAddress').value, 'NFT address');
+      const tokenId = BigInt(el('listTokenId').value);
+      const pricePerDay = ethers.parseEther(el('listPricePerDay').value.trim());
+      const decimals = Number(fields.stablecoinDecimals.value || 6);
+      const collateralAmount = ethers.parseUnits(el('listCollateral').value.trim(), decimals);
+      return contract.listRental(nftAddress, tokenId, pricePerDay, collateralAmount);
+    }));
+
+    el('approveBtn').addEventListener('click', () => runTx('approveResult', async () => {
+      const token = getTokenContract();
+      const escrowAddress = requireAddress(fields.escrowAddress.value, 'Escrow address');
+      const decimals = Number(fields.stablecoinDecimals.value || 6);
+      const amount = ethers.parseUnits(el('approveAmount').value.trim(), decimals);
+      return token.approve(escrowAddress, amount);
+    }));
+
+    el('rentBtn').addEventListener('click', () => runTx('rentResult', async () => {
+      const contract = getEscrowContract();
+      const nftAddress = requireAddress(el('rentNftAddress').value, 'NFT address');
+      const tokenId = BigInt(el('rentTokenId').value);
+      const rentValue = ethers.parseEther(el('rentPriceEth').value.trim());
+      return contract.rentNft(tokenId, nftAddress, { value: rentValue });
+    }));
+
+    el('endBtn').addEventListener('click', () => runTx('endResult', async () => {
+      const contract = getEscrowContract();
+      const nftAddress = requireAddress(el('endNftAddress').value, 'NFT address');
+      const tokenId = BigInt(el('endTokenId').value);
+      return contract.endRental(tokenId, nftAddress);
+    }));
+
+    el('delistBtn').addEventListener('click', () => runTx('delistResult', async () => {
+      const contract = getEscrowContract();
+      const nftAddress = requireAddress(el('delistNftAddress').value, 'NFT address');
+      const tokenId = BigInt(el('delistTokenId').value);
+      return contract.delist(nftAddress, tokenId);
+    }));
+
+    for (const field of Object.values(fields)) {
+      field.addEventListener('input', updateSessionUI);
+    }
+
+    if (window.ethereum) {
+      window.ethereum.on?.('accountsChanged', async (accounts) => {
+        state.account = accounts[0] || null;
+        if (state.account && state.provider) {
+          state.signer = await state.provider.getSigner();
+        }
+        await updateSessionUI();
+      });
+      window.ethereum.on?.('chainChanged', async () => {
+        if (state.provider) state.provider = new ethers.BrowserProvider(window.ethereum);
+        if (state.provider && state.account) state.signer = await state.provider.getSigner();
+        await updateSessionUI();
+      });
+    }
+
+    setTheme(state.theme);
+    updateSessionUI();
+  </script>
+</body>
+</html>

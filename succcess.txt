@@ -1,0 +1,48 @@
+[⠘] Compiling...
+No files changed, compilation skipped
+Warning: Detected artifacts built from source files that no longer exist. Run `forge clean` to make sure builds are in sync with project files.
+ - /mnt/d/GamingRentals/script/Asset.s.sol
+ - /mnt/d/GamingRentals/test/RentalAsset.t.sol
+Script ran successfully.
+
+== Return ==
+0: contract RentalEscrow 0x135ee939aF16Ce33036A965f7Ea65954A75801fb
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 11155111
+
+Estimated gas price: 25.993413538 gwei
+
+Estimated total gas used for script: 4772109
+
+Estimated amount required: 0.124043402685411642 ETH
+
+==========================
+
+##### sepolia
+✅  [Success] Hash: 0xa7c69a5f90239e19a280014b30d430b1da4afea7b74667c3fc70189704f4c9e4
+Contract Address: 0x42a5c516624c2E1a7bc05bea9b05930449B28D68
+Block: 11029426
+Paid: 0.027142764443059452 ETH (2122098 gas * 12.790532974 gwei)
+
+
+##### sepolia
+✅  [Success] Hash: 0x33a92ee941037ef01a2a51f29fbe1d93ff899c9cc1e158e56c9d31dee6092e2c
+Contract Address: 0x135ee939aF16Ce33036A965f7Ea65954A75801fb
+Block: 11029427
+Paid: 0.020102953380325596 ETH (1548756 gas * 12.980064891 gwei)
+
+✅ Sequence #1 on sepolia | Total Paid: 0.047245717823385048 ETH (3670854 gas * avg 12.885298932 gwei)
+                                                                              
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /mnt/d/GamingRentals/broadcast/RentalEscrow.s.sol/11155111/run-latest.json
+
+Sensitive values saved to: /mnt/d/GamingRentals/cache/RentalEscrow.s.sol/11155111/run-latest.json
+//https://sepolia.etherscan.io/address/0x135ee939aF16Ce33036A965f7Ea65954A75801fb
