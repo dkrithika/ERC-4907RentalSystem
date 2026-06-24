@@ -165,7 +165,6 @@ MIT License
 
 ## Contact
 
-Add your details:
 
 - Name: Krithika Damshala
 - GitHub: https://github.com/dkrithika
