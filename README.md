@@ -65,7 +65,7 @@ A decentralized NFT rental application built with Solidity, Foundry, and a minim
 
 ```bash
 git clone https://github.com/dkrithika/ERC-4907RentalSystem
-cd GamingRentals
+cd ERC-4907RentalSystem
 forge install
 forge build
 ```
@@ -122,14 +122,6 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 - NFT delisting
 - Real-time transaction status updates
 
-## Example Demo
-
-You can add:
-
-- A screenshot of the UI
-- Sepolia contract addresses
-- A short demo GIF
-- Sample transaction hashes
 
 
 ## Security Considerations
