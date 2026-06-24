@@ -84,12 +84,12 @@ forge coverage
 Deploy the NFT contract and escrow contract using Foundry scripts:
 
 ```bash
-forge script script/Asset.s.sol:AssetScript \
-  --rpc-url $SEPOLIA_RPC_URL \
+forge script script/Asset.s.sol:AssetScript 
+  --rpc-url $SEPOLIA_RPC_URL 
   --broadcast
 
-forge script script/RentalEscrow.s.sol:RentalEscrowScript \
-  --rpc-url $SEPOLIA_RPC_URL \
+forge script script/RentalEscrow.s.sol:RentalEscrowScript 
+  --rpc-url $SEPOLIA_RPC_URL 
   --broadcast
 ```
 
