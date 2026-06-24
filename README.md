@@ -124,7 +124,26 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 - NFT delisting
 - Real-time transaction status updates
 
+## Demo
 
+<table>
+<tr>
+<td><img src="./Screenshots/contractSetup.png" width="350"/></td>
+<td><img src="./Screenshots/ListAndApproval.png" width="350"/></td>
+</tr>
+<tr>
+<td><img src="./Screenshots/Rent.png" width="350"/></td>
+<td><img src="./Screenshots/EndRental.png" width="350"/></td>
+</tr> 
+<tr>
+<td align="center">NFT listed for rent</td>
+<td align="center">Renting flow with collateral</td>
+</tr>
+</table>
+
+<img src="./Screenshots/Delist.png" width="500"/>
+
+*Successful rental confirmed on-chain*
 
 ## Security Considerations
 
