@@ -148,9 +148,7 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 
 
 ## Live Demo on Etherscan
-```link
-https://sepolia.etherscan.io/address/0x135ee939aF16Ce33036A965f7Ea65954A75801fb
-```
+[View contract on Etherscan](https://sepolia.etherscan.io/address/0x135ee939aF16Ce33036A965f7Ea65954A75801fb)
 ## Future Improvements
 
 - Improve frontend UX
