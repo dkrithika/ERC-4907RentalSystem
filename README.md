@@ -1,36 +1,40 @@
 # ERC4907 NFTRental System
 
-A decentralized NFT rental application built with Solidity, Foundry, and a minimal ethers.js frontend. The project uses ERC-4907-style user assignments and an escrow-based rental flow that lets owners list NFTs, renters lock collateral, and temporary usage rights be assigned on-chain.
+A decentralized NFT rental application built with Solidity, Foundry, and a minimal ethers.js frontend. The system allows NFT owners to list ERC-4907-compatible assets for rent, while renters pay ETH for access and lock USDC as collateral. Temporary user rights are assigned on-chain and expire automatically after the rental period.
+
 ## Features
+- List NFTs with a daily rental price and collateral requirement.
+- Rent NFTs by paying ETH and depositing USDC collateral.
+- Assign temporary usage rights through ERC-4907-compatible user access.
+- Expire rental access automatically after the rental period.
+- Return collateral to renters after a completed rental.
+- Delist NFTs when they are not actively rented.
+- Emit events for frontend tracking and transaction updates.
 
-
-- 🏠 **List NFTs** - Owners can list their NFTs with daily rent price and collateral
-- 🔑 **Rent NFTs** - Users can rent NFTs by paying ETH and depositing USDC collateral
-- ⏰ **Time-Controlled Access** - Automatic expiry after rental period (7 days)
-- 💰 **Collateral System** - USDC collateral protects lenders against misuse
-- 🔄 **End Rental** - Renters get collateral back after expiry
-- 🗑️ **Delist** - Owners can remove listings at any time (unless actively rented)
-- 📡 **Events** - Complete event emission for frontend tracking
 ## Tech Stack
 
 - Solidity
 - Foundry
-- Ethers.js  / HTML-CSS-JS
-- Sepolia testnet
+- Ethers.js
+- HTML, CSS, JavaScript
 - OpenZeppelin
+- Sepolia testnet
 
 ## Architecture
 
-┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│ Owner       │────▶│ Asset │────▶│ Rental │
-│ (Lender)    │ │ (ERC-4907) │   │ Escrow │
-└─────────────┘ └─────────────┘ └─────────────┘
-│ │
-▼ ▼
-┌─────────────┐ ┌─────────────┐
-│ User │          │ USDC │
-│ (Renter) │      │ (Collateral)│
-└─────────────┘ └─────────────┘
+```text
+┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+│ Owner        │─────▶│ Asset        │─────▶│ Rental       │
+│ (Lender)     │      │ (ERC-4907)   │      │ Escrow       │
+└──────────────┘      └──────────────┘      └──────────────┘
+        │                                           │
+        │                                           │
+        ▼                                           ▼
+┌──────────────┐                           ┌──────────────┐
+│ User         │                           │ USDC         │
+│ (Renter)     │                           │ (Collateral) │
+└──────────────┘                           └──────────────┘
+```
 
 ## Project Structure
 
@@ -49,8 +53,6 @@ A decentralized NFT rental application built with Solidity, Foundry, and a minim
 ## Getting Started
 
 ### Prerequisites
-
-
 
 - Foundry installed
 - Node.js and npm installed
@@ -73,17 +75,13 @@ forge build
 ```bash
 forge build
 forge test -vv
-```
-
-
-
-```bash
 forge coverage
 ```
 
+
 ## Deployment
 
-Add the exact deployment commands you used. Example:
+Deploy the NFT contract and escrow contract using Foundry scripts:
 
 ```bash
 forge script script/Asset.s.sol:AssetScript 
@@ -98,7 +96,7 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 ## Usage Flow
 
 1. Deploy the NFT contract.
-2. Deploy the escrow contract.
+2. Deploy the rental escrow contract.
 3. Mint an NFT (The Nft minted here will be test NFT,If you want to use your own NFT make sure it follows ERC4907 guidlines).
 4. List the NFT for rent.
 5. Approve stablecoin collateral from the renter wallet.
@@ -106,30 +104,23 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 7. End the rental
 8. Delist the NFT if you want.
 
-## Smart Contract Notes
+## Design Notes
 
-- Why you chose ERC-4907.
-- How rental permissions are assigned and revoked.
-- How collateral is handled.
-- Known constraints, such as whether one renter can have only one active rental at a time.
-- Important validation or security checks.
+- ERC-4907 was chosen because it separates ownership from temporary usage rights.
+- Rental permissions are assigned by setting a temporary user with an expiry time.
+- Access is revoked automatically once the rental period ends.
+- USDC collateral is locked in escrow during the rental period and returned after completion.
+- The current contract design may limit one renter to one active rental record at a time, depending on how renter state is stored.
 
 ## Frontend
 
-🔌 MetaMask wallet connection
-
-📝 List NFTs with price and collateral
-
-✅ Approve USDC spending
-
-🔑 Rent NFTs (pay ETH, deposit USDC)
-
-⏱️ End rentals after expiry
-
-🗑️ Delist NFTs
-
-📊 Real-time transaction status
-
+- MetaMask wallet connection
+- NFT listing with rent and collateral values
+- USDC approval for collateral transfers
+- NFT rental flow
+- Rental ending after expiry
+- NFT delisting
+- Real-time transaction status updates
 
 ## Example Demo
 
@@ -153,7 +144,7 @@ You can add:
 - Access control (only owner can list/delist)
 - Rental period enforcement (cannot end early)
 - 94%+ test coverage
-- This isnt supportive of cross-chain interaction,only sepolia.
+- The project is currently deployed only on Sepolia and does not support cross-chain interaction.
 
 ## 🏆 Achievements
 
@@ -174,7 +165,7 @@ https://sepolia.etherscan.io/address/0x135ee939aF16Ce33036A965f7Ea65954A75801fb
 - Add more test coverage for edge cases
 - Add protocol fees
 - Support multiple concurrent rentals per renter if contract design changes
-
+- Add richer listing discovery in the frontend
 
 ## License
 
@@ -187,11 +178,4 @@ Add your details:
 - Name: Krithika Damshala
 - GitHub: https://github.com/dkrithika
 
-***
-
-
-# NFT Rental dApp
-
-
-```
 
