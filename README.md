@@ -97,7 +97,7 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 
 1. Deploy the NFT contract.
 2. Deploy the rental escrow contract.
-3. Mint an NFT (The Nft minted here will be test NFT,If you want to use your     own NFT make sure it follows ERC4907 guidlines).
+3. Mint an NFT. The NFT minted here will be a test NFT. If you want to use your own NFT, make sure it follows ERC-4907 guidelines.
 4. List the NFT for rent.
 5. Approve stablecoin collateral from the renter wallet.
 6. Rent the NFT through the frontend.
