@@ -1,5 +1,7 @@
 # ERC4907 NFTRental System
 
+![CI](https://github.com/dkrithika/ERC-4907RentalSystem/actions/workflows/test.yml/badge.svg)
+
 A decentralized NFT rental application built with Solidity, Foundry, and a minimal ethers.js frontend. The system allows NFT owners to list ERC-4907-compatible assets for rent, while renters pay ETH for access and lock USDC as collateral. Temporary user rights are assigned on-chain and expire automatically after the rental period.
 
 ## Features
