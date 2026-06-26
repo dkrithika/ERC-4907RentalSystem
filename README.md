@@ -128,8 +128,12 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 
 <table>
 <tr>
-<td><img src="./Screenshots/contractSetup.png" width="350"/></td>
-<td><img src="./Screenshots/ListAndApproval.png" width="350"/></td>
+<td><img src="./Screenshots/contractSetup.png" width="450"/></td>
+<td><img src="./Screenshots/ListAndApproval.png" width="450"/></td>
+</tr>
+ <tr>
+<td align="center">NFT listed for rent</td>
+<td align="center">Renting flow with collateral</td>
 </tr>
 <tr>
 <td><img src="./Screenshots/Rent.png" width="350"/></td>
