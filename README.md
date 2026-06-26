@@ -147,7 +147,7 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 
 <img src="./Screenshots/DelistNft.png" width="500"/>
 <tr>
-<td align="center">DelistNft/td>
+<td align="center">DelistNft</td>
 </tr>
 
 *Successful rental confirmed on-chain*
