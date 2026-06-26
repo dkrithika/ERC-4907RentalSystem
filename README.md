@@ -141,11 +141,11 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 </tr> 
 <tr>
 <td align="center">NFT listed for rent</td>
-<td align="center">Renting flow with collateral</td>
+<td align="center">End Rental</td>
 </tr>
 </table>
 
-<img src="./Screenshots/Delist.png" width="500"/>
+<img src="./Screenshots/DelistNft.png" width="500"/>
 
 *Successful rental confirmed on-chain*
 
