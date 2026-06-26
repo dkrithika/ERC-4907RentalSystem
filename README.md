@@ -150,6 +150,7 @@ forge script script/RentalEscrow.s.sol:RentalEscrowScript
 <td align="center">DelistNft</td>
 </tr>
 
+
 *Successful rental confirmed on-chain*
 
 ## Security Considerations
